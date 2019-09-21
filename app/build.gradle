@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
+apply plugin: "kotlin-kapt"
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -20,6 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding{
+        enabled = true
+    }
 }
 
 dependencies {
@@ -31,4 +34,17 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+    implementation "androidx.fragment:fragment-ktx:1.1.0"
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
+    api "androidx.paging:paging-runtime:$rootProject.pagingVersion"
+    //net
+    api 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    //smart refresh
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-32'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-32'
 }
