@@ -11,6 +11,6 @@ interface Api {
     @GET("UCenter/get_massage_index")
     suspend fun loadHome(): ReposData<ExampleData>
 
-    @GET("UCenter/get_massage_index1")
+    @GET("UCenter/get_massage_index")
     suspend fun loadFakeHome(): ReposData<ExampleData>
 }

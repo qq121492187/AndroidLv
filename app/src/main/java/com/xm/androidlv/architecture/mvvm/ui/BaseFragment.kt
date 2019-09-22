@@ -16,14 +16,6 @@ import com.xm.androidlv.net.resource.Resource
  *on 2019/9/21
  */
 abstract class BaseFragment<T> : Fragment() {
-    /**
-     * 视图是否加载完毕
-     */
-    private var isViewPrepare = false
-    /**
-     * 数据是否加载过了
-     */
-    private var hasLoadData = false
 
     protected lateinit var viewBinding: ViewDataBinding
 
@@ -46,28 +38,11 @@ abstract class BaseFragment<T> : Fragment() {
         observableUI(uiObservable)
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            lazyLoadDataIfPrepared()
-        }
-    }
-
-    private fun lazyLoadDataIfPrepared() {
-        if (userVisibleHint && isViewPrepare && !hasLoadData) {
-            lazyLoad()
-            hasLoadData = true
-        }
-    }
 
     abstract fun bindLayoutResId(): Int
     abstract fun initializeUI()
     abstract fun observableUI(observer: Observer<Resource<T>>)
     abstract fun subscribeUI(data: T)
-    /**
-     * 懒加载
-     */
-    abstract fun lazyLoad()
 
     fun subscribeLoading() {}
     fun subscribeError(message: String) {}
@@ -86,4 +61,5 @@ abstract class BaseFragment<T> : Fragment() {
             }
         }
     }
+
 }

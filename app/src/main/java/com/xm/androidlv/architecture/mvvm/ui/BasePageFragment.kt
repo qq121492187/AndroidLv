@@ -1,8 +1,8 @@
 package com.xm.androidlv.architecture.mvvm.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.paging.PagedList
@@ -28,7 +28,6 @@ abstract class BasePageFragment<T> : BaseFragment<T>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observableUI()
     }
 
     override fun bindLayoutResId(): Int = R.layout.fragment_base_page
@@ -40,13 +39,10 @@ abstract class BasePageFragment<T> : BaseFragment<T>() {
         refresh.setOnRefreshListener { viewModel.refresh() }
     }
 
-    override fun lazyLoad() {
-        refresh.autoRefresh()
-    }
 
     private fun observableUI() {
         viewModel.repoStatus.observe(this, Observer {
-            Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            subscribeStatus(it)
         })
         viewModel.pageData.observe(this, Observer {
             subscribeUI(it)
@@ -54,14 +50,57 @@ abstract class BasePageFragment<T> : BaseFragment<T>() {
     }
 
     open fun subscribeUI(list: PagedList<T>) {
-        refresh.finishRefresh()
         mAdapter.submitList(list)
+    }
+
+    private fun subscribeStatus(status: Resource<Boolean>) {
+        when (status) {
+            is Resource.Success -> {
+                refresh.finishRefresh()
+                if (status.data!!) {
+                    //加载成功
+                    onPageLoaded()
+                } else {
+                    //无数据
+                    onPageEmpty()
+                }
+            }
+            is Resource.Loading -> {
+                onPageLoading()
+            }
+            is Resource.Error -> {
+                onPageError(status.data!!)
+            }
+        }
+    }
+
+    open fun onPageEmpty() {
+        Log.e("page","empty")
+    }
+
+    open fun onPageError(data: Boolean) {
+        if(data){
+            //初始数据异常
+            Log.e("page","init error")
+        }else{
+            //分页数据异常
+        }
+        Log.e("page","loadmore error")
+    }
+
+    open fun onPageLoading() {
+        refresh.autoRefreshAnimationOnly()
+    }
+
+    open fun onPageLoaded() {
+        Log.e("page","loaded")
     }
 
     override fun subscribeUI(data: T) {
     }
 
     override fun observableUI(observer: Observer<Resource<T>>) {
+        observableUI()
     }
 
     open fun enabledRefresh(): Boolean = true

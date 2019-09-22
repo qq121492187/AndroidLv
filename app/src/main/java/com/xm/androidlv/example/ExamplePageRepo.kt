@@ -16,12 +16,18 @@ class ExamplePageRepo : BasePageRepository<ExampleData.IconList>() {
         onPage: (list: List<ExampleData.IconList>) -> Unit
     ) {
         val icons = mutableListOf<ExampleData.IconList>()
+        //发送加载中的通知，在初始化数据时通知
+        //分页数据的加载过程不需要通知，由paging负责控制
         repoStatus.postValue(Resource.Loading())
         launch {
+            //请求数据
             val res = repos { service.loadHome() }
-            handlePageStatus(res) {
-                icons.addAll(res.data?.icon_list!!)
+            //处理请求数据
+            handlePageStatus(res, res.data?.icon_list, true) {
+                icons.addAll(it)
+                //处理列表
                 onPage.invoke(icons)
+
             }
         }
     }
@@ -35,8 +41,8 @@ class ExamplePageRepo : BasePageRepository<ExampleData.IconList>() {
         val icons = mutableListOf<ExampleData.IconList>()
         launch {
             val res = repos { service.loadFakeHome() }
-            handlePageStatus(res) {
-                icons.addAll(res.data?.icon_list!!)
+            handlePageStatus(res, res.data?.icon_list) {
+                icons.addAll(it)
                 onPage.invoke(icons)
             }
         }

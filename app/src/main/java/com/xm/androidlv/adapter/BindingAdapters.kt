@@ -3,6 +3,7 @@ package com.xm.androidlv.adapter
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
@@ -25,4 +26,11 @@ fun loadImageForUrl(imageView: ImageView, url: String?) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(imageView)
     }
+}
+
+/**
+ * 绑定adapter
+ */
+fun bindAdapter(rv: RecyclerView, adapter: RecyclerView.Adapter<BaseViewHolder>) {
+    rv.adapter = adapter
 }

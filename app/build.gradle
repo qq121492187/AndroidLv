@@ -47,4 +47,10 @@ dependencies {
     //smart refresh
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-32'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-32'
+    //运行时权限
+    implementation 'pub.devrel:easypermissions:1.2.0'
+    //状态栏
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    //anko
+    implementation 'org.jetbrains.anko:anko-commons:0.10.8'
 }
